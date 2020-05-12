@@ -19,20 +19,20 @@ namespace GetVenuePhotos
         public Function()
         {
             client = new HttpClient();
-            ClientId = Environment.GetEnvironmentVariable("AWS_REGION");
-            ClientSecret = Environment.GetEnvironmentVariable("AWS_REGION");
+            ClientId = Environment.GetEnvironmentVariable("ClientId");
+            ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
         }
 
         /// <summary>
-        /// A simple function that takes a string and does a ToUpper
+        /// Ç◊ÉjÉÖÅ[ÇÃé ê^ÇéÊìæÇ∑ÇÈ
         /// </summary>
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        async public Task<Photos> FunctionHandler(string venueId, ILambdaContext context)
+        async public Task<Photos> FunctionHandler(Request input, ILambdaContext context)
         {
             var response = await client.GetAsync(
-               $"https://api.foursquare.com/v2/venues/{venueId}/photos?client_id={ClientId}&client_secret={ClientSecret}&v=20180815");
+               $"https://api.foursquare.com/v2/venues/{input.venueId}/photos?client_id={ClientId}&client_secret={ClientSecret}&v=20180815");
             var result = await response.Content.ReadAsStringAsync();
             var deserialisedResult = JsonConvert.DeserializeObject<FoursquareResponse>(result);
 
@@ -40,7 +40,7 @@ namespace GetVenuePhotos
             {
                 count = deserialisedResult.response.photos.count,
                 items = deserialisedResult.response.photos.items,
-                layout = deserialisedResult.response.photos.layout,
+                layout = deserialisedResult.response.photos.layout
             };
         }
     }

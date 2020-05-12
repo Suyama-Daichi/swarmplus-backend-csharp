@@ -8,7 +8,7 @@ namespace GetVenuePhotos.models
     public class FoursquareResponse
     {
         public Meta meta { get; set; }
-        public Response response { get; set; }
+        public ResponseData response { get; set; }
     }
 
     public class Meta
@@ -17,7 +17,7 @@ namespace GetVenuePhotos.models
         public string requestId { get; set; }
     }
 
-    public class Response
+    public class ResponseData
     {
         public Photos photos { get; set; }
     }
