@@ -10,6 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GetCheckinDetail\GetCheckinDetail.csproj" />
+    <ProjectReference Include="..\GetUserCheckins\GetUserCheckins.csproj" />
     <ProjectReference Include="..\GetVenuePhotos\GetVenuePhotos.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using GetVenuePhotos.models;
+﻿using GetUserCheckins.models;
 using System;
 
 namespace Debugger
@@ -7,10 +7,10 @@ namespace Debugger
     {
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            GetVenuePhotos.Function fnc = new GetVenuePhotos.Function();
-            Photos photos = await fnc.FunctionHandler(new Request { venueId = "52ee4abd498ef7a7403e9441" }, new Amazon.Lambda.TestUtilities.TestLambdaContext());
+            GetUserCheckins.Function fnc = new GetUserCheckins.Function();
+            var result = await fnc.FunctionHandler(new Request { headers = new Headers() { Authorization = "bearer 4VELTRFRQOV2XMJ5YE3RMPJAZ3PQIGJCP5DFSZRQURA0EDXK" },param= new Param() { afterTimestamp = "1585666800",beforeTimestamp= "1588258799" } }, new Amazon.Lambda.TestUtilities.TestLambdaContext());
 
-            Console.WriteLine(photos);
+            Console.WriteLine(result);
             Console.ReadKey();
         }
     }
