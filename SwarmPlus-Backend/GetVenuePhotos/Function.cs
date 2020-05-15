@@ -19,6 +19,9 @@ namespace GetVenuePhotos
         public Function()
         {
             client = new HttpClient();
+            client.BaseAddress = new Uri("https://api.foursquare.com/v2/");
+            client.DefaultRequestHeaders.Add("Acccept", "application/json");
+            client.DefaultRequestHeaders.Add("Accept-Language", "ja");
             ClientId = Environment.GetEnvironmentVariable("ClientId");
             ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
         }
@@ -32,7 +35,7 @@ namespace GetVenuePhotos
         async public Task<Photos> FunctionHandler(Request input, ILambdaContext context)
         {
             var response = await client.GetAsync(
-               $"https://api.foursquare.com/v2/venues/{input.venueId}/photos?client_id={ClientId}&client_secret={ClientSecret}&v=20180815");
+               $"venues/{input.venueId}/photos?client_id={ClientId}&client_secret={ClientSecret}&v=20180815");
             var result = await response.Content.ReadAsStringAsync();
             var deserialisedResult = JsonConvert.DeserializeObject<FoursquareResponse>(result);
 

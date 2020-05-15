@@ -21,6 +21,9 @@ namespace GetCheckinDetail
         public Function()
         {
             client = new HttpClient();
+            client.BaseAddress = new Uri("https://api.foursquare.com/v2/");
+            client.DefaultRequestHeaders.Add("Acccept", "application/json");
+            client.DefaultRequestHeaders.Add("Accept-Language", "ja");
             ClientId = Environment.GetEnvironmentVariable("ClientId");
             ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
         }
@@ -33,7 +36,7 @@ namespace GetCheckinDetail
         public async Task<CheckinInfo> FunctionHandler(Request input, ILambdaContext context)
         {
             var response = await client.GetAsync(
-                $"https://api.foursquare.com/v2/checkins/{input.param.checkinId}?oauth_token={input.headers.Authorization.Substring(7)}&v=20180815");
+                $"checkins/{input.param.checkinId}?oauth_token={input.headers.Authorization.Substring(7)}&v=20180815");
             var result = await response.Content.ReadAsStringAsync();
             var deserialisedResult = JsonConvert.DeserializeObject<ResponseFromFoursquare>(result);
             return new CheckinInfo
