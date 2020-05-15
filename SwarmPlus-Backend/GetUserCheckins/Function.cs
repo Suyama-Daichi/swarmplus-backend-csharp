@@ -29,7 +29,7 @@ namespace GetUserCheckins
         /// <param name="input"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<ResponseFromFoursquare> FunctionHandler(Request input, ILambdaContext context)
+        public async Task<FoursquareResponse> FunctionHandler(Request input, ILambdaContext context)
         {
             string accessToken = input.headers.Authorization.Substring(7);
             string afterTimestamp = input.param.afterTimestamp;
@@ -51,17 +51,12 @@ namespace GetUserCheckins
                 }
             }
 
-            return new ResponseFromFoursquare
+            return new FoursquareResponse
             {
-                meta = deserialisedResult.meta,
-                notifications = deserialisedResult.notifications,
-                response = new FoursquareResponse
+                checkins = new Items
                 {
-                    checkins = new Items
-                    {
-                        count = deserialisedResult.response.checkins.count,
-                        items = deserialisedResult.response.checkins.items
-                    }
+                    count = deserialisedResult.response.checkins.count,
+                    items = deserialisedResult.response.checkins.items
                 }
             };
         }
@@ -74,13 +69,13 @@ namespace GetUserCheckins
         /// <param name="beforeTimestamp">取得する期間(終わり)</param>
         /// <param name="deserialisedResult">途中までのチェックイン情報</param>
         /// <returns>結合されたチェックイン情報</returns>
-        private async Task<CheckinInfo[]> getCheckinForOver250PerMonth(string accessToken, string afterTimestamp, int beforeTimestamp)
-        {
-            HttpResponseMessage moreResponse = await client.GetAsync(
-            $"users/self/checkins?oauth_token={accessToken}&v=20180815&limit=250&afterTimestamp={afterTimestamp}&beforeTimestamp={beforeTimestamp}");
-            string moreResult = await moreResponse.Content.ReadAsStringAsync();
-            ResponseFromFoursquare moreDeserialisedResult = JsonConvert.DeserializeObject<ResponseFromFoursquare>(moreResult);
-            return moreDeserialisedResult.response.checkins.items;
+            private async Task<CheckinInfo[]> getCheckinForOver250PerMonth(string accessToken, string afterTimestamp, int beforeTimestamp)
+            {
+                HttpResponseMessage moreResponse = await client.GetAsync(
+                $"users/self/checkins?oauth_token={accessToken}&v=20180815&limit=250&afterTimestamp={afterTimestamp}&beforeTimestamp={beforeTimestamp}");
+                string moreResult = await moreResponse.Content.ReadAsStringAsync();
+                ResponseFromFoursquare moreDeserialisedResult = JsonConvert.DeserializeObject<ResponseFromFoursquare>(moreResult);
+                return moreDeserialisedResult.response.checkins.items;
+            }
         }
     }
-}
